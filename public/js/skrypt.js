@@ -5,9 +5,11 @@ $(document).ready(function () {
 
     var socket = io.connect('http://localhost:3000');
 
+
+
     var addNewSelectedItem = function (data){
         return '<tr id="item'+data.id+'" hidden="true"><td><img class="img-polaroid" src="'+ data.img +'"></img></td>'+
-        '<td class="rank">'+data.rank+'</td>'+
+        '<td class="rank"><span class="badge badge-success">'+data.rank+'</span></td>'+
                     '<td><button class="btn btn-warning" id="itemBtn'+data.id+'">VOTE</button></td></tr>';
     }
 
@@ -35,7 +37,10 @@ $(document).ready(function () {
         socket.emit('addNewImg', {'src': img});
     }
     $('#buttonTag').click(function () {
-        var value = document.getElementById("appendedInputButton").value;
+        $("#alertdiv").fadeOut("slow");
+        //$(".alert").alert('close');
+        var value = document.getElementById("inputSuccessTags").value;
+        var numpic = document.getElementById("inputSuccessPic").value;
         $.getJSON("http://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?", {
             tags: value,
             tagmode: "any",
@@ -45,7 +50,7 @@ $(document).ready(function () {
                 console.log(item.media.m);
                 $('#responseOutput').append('<tr><td><img id="img'+i+'" class="img-polaroid" src="'+ item.media.m +'"></img><td></td>'+
                     '<td><button class="btn btn-success" id="'+i+'">SELECT AND VOTE</button></td></tr>');
-                if (i === 5) {
+                if (i === (numpic-1)) {
                     return false;
                 }
             });

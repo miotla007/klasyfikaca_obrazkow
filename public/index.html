@@ -22,17 +22,31 @@
 		 <div class="row-fluid">
 
 			<div class="span6">
-                <div class="input-append">
                     <label><p class="text-success">Search by tag:</p></label>
-                    <input class="span8" id="appendedInputButton" type="text">
-                    <button class="btn" type="button" id="buttonTag">Go!</button>
+                    <div class="control-group info">
+                        <label class="control-label" for="inputInfo">Tags:</label>
+                        <div class="controls">
+                        <input type="text" id="inputSuccessTags">
+                        </div>
+                    </div>
+                    <div class="control-group info">
+                        <label class="control-label" for="inputInfo">How many pictures? (max 20)</label>
+                        <div class="controls">
+                        <input type="text" id="inputSuccessPic" max="20">
+                        </div>
+                    </div>
+                    <!--<input class="span2" id="appendedInputButton" type="text">-->
+                    <button class="btn btn-primary" type="button" id="buttonTag">Go!</button>
+                <p class="lead">Your images:</p>
+                <div class="alert alert-info" id="alertdiv">
+                    <p>No searched picture yet.</p>
                 </div>
                 <table class="table table-striped" id="responseOutput">
                 </table>
 
             </div>
-            <div class="span6">
-
+            <div class="span6" id="responsecontainer">
+                <p class="lead">All selected images:</p>
                 <table class="table table-striped" id="selectedItems">
                 </table>
 
