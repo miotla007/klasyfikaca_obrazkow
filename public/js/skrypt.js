@@ -4,18 +4,18 @@
 $(document).ready(function () {
 
     var socket = io.connect('http://localhost:3000');
-
+    var picId = 0;
 
 
     var addNewSelectedItem = function (data){
         return '<tr id="item'+data.id+'" hidden="true"><td><img class="img-polaroid" src="'+ data.img +'"></img></td>'+
-        '<td class="rank"><span class="badge badge-success">'+data.rank+'</span></td>'+
+        '<td><span class="badge badge-success rank">'+data.rank+'</span></td>'+
                     '<td><button class="btn btn-warning" id="itemBtn'+data.id+'">VOTE</button></td></tr>';
     }
 
     var voteListBtnClick = function(that) {
         var id = $(that).attr('id');
-        // console.log(id);
+         console.log(id);
         var img = $('#img'+id).attr('src');
         // console.log(img);
 
@@ -46,10 +46,12 @@ $(document).ready(function () {
             tagmode: "any",
             format: "json"
         }, function (data) {
+            $('#responseOutput').children().remove();
             $.each(data.items, function (i, item) {
                 console.log(item.media.m);
-                $('#responseOutput').append('<tr><td><img id="img'+i+'" class="img-polaroid" src="'+ item.media.m +'"></img><td></td>'+
-                    '<td><button class="btn btn-success" id="'+i+'">SELECT AND VOTE</button></td></tr>');
+                $('#responseOutput').append('<tr><td><img id="img'+picId+'" class="img-polaroid" src="'+ item.media.m +'"></img><td></td>'+
+                    '<td><button class="btn btn-success" id="'+picId+'">SELECT AND VOTE</button></td></tr>');
+                picId++;
                 if (i === (numpic-1)) {
                     return false;
                 }
@@ -59,7 +61,7 @@ $(document).ready(function () {
     });
 
     socket.on('setNewImg', function(data) {
-        console.log(data);
+        //2console.log(data);
         var items = $('#selectedItems tr').filter('#item'+data.id);
         if(items.length === 0){
             $('#selectedItems').append(addNewSelectedItem(data));
@@ -70,5 +72,16 @@ $(document).ready(function () {
         }else{
             $('#item'+data.id+' .rank').text(data.rank);
         }
+
+        //sortowanie na widoku
+        var trs = $('#selectedItems tr').sort( function(a,b) {
+            return parseInt($('#'+ ($(b).attr('id')) + ' .rank').text(), 10) -
+                 parseInt($('#'+ ($(a).attr('id')) + ' .rank').text(), 10);
+        });
+
+        $('#selectedItems').children().remove();
+        $('#selectedItems').append(trs);
+        //console.log(trs);
+        $('#selectedItems button').click(function() { voteItemBtnClick(this); });
     });
 });
