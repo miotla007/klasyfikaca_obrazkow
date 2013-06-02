@@ -4,6 +4,10 @@
 $(document).ready(function () {
 
     var socket = io.connect('http://localhost:3000');
+
+    socket.on('connect', function(){
+        $('#selectedItems').children().remove();
+    });
     var picId = 0;
 
 
@@ -61,7 +65,7 @@ $(document).ready(function () {
     });
 
     socket.on('setNewImg', function(data) {
-        //2console.log(data);
+        //console.log(data);
         var items = $('#selectedItems tr').filter('#item'+data.id);
         if(items.length === 0){
             $('#selectedItems').append(addNewSelectedItem(data));

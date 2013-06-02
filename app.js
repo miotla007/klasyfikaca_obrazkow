@@ -23,10 +23,12 @@ var imgDb = require('./lib/imgDb')();
 socket.on('connection', function (client) {
     'use strict';
 
-    var imgs = imgDb.getAllImgs();
-    for(var i = 0; i < imgs.length; i++){
-        client.emit('setNewImg', imgs[i]);
-    }
+    imgDb.getAllData(client, function(client){
+        var imgs = imgDb.getAllImgs();
+        for(var i = 0; i < imgs.length; i++){
+            client.emit('setNewImg', imgs[i]);
+        }
+    });
 
     client.on('addNewImg', function(data) {
         var id = imgDb.addNewImg(data);
